@@ -19,7 +19,7 @@ function InteractiveDemo() {
   const [easingFactor, setEasingFactor] = React.useState(0.1);
   const [updateInterval, setUpdateInterval] = React.useState(15);
   const [size, setSize] = React.useState(14);
-  const [color, setColor] = React.useState("#ff6b6b");
+  const [color, setColor] = React.useState(0);
   const [borderRadius, setBorderRadius] = React.useState("100%");
   const [hideCursor, setHideCursor] = React.useState(true);
   const [fadeDuration, setFadeDuration] = React.useState(200);
@@ -29,7 +29,7 @@ function InteractiveDemo() {
     easingFactor,
     updateInterval,
     size,
-    color,
+    color: `hsl(${color}, 70%, 60%)`,
     borderRadius,
     hideCursor,
     fadeDuration,
@@ -99,33 +99,46 @@ function InteractiveDemo() {
           >
             🎨 Color
           </label>
-          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              style={{
-                width: "50px",
-                height: "40px",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            />
-            <input
-              type="text"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              style={{
-                flex: 1,
-                padding: "0.5rem",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "0.9rem",
-              }}
-              placeholder="#ff6b6b"
-            />
-          </div>
+          <input
+            type="range"
+            min="0"
+            max="360"
+            step="1"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            style={{
+              width: "100%",
+              background:
+                "linear-gradient(to right, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000)",
+              height: "8px",
+              borderRadius: "4px",
+              outline: "none",
+              WebkitAppearance: "none",
+              cursor: "pointer",
+            }}
+          />
+          <style>{`
+            input[type="range"]::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              background: hsl(${color}, 70%, 60%);
+              border: 2px solid white;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+              cursor: pointer;
+            }
+            input[type="range"]::-moz-range-thumb {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              background: hsl(${color}, 70%, 60%);
+              border: 2px solid white;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+              cursor: pointer;
+            }
+          `}</style>
           <div
             style={{
               fontSize: "0.8rem",
@@ -133,7 +146,7 @@ function InteractiveDemo() {
               marginTop: "0.25rem",
             }}
           >
-            Color of the cursor element (hex, rgb, or named colors)
+            Hue value for the cursor element (0-360 degrees)
           </div>
         </div>
 
