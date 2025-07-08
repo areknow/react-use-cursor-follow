@@ -1,104 +1,166 @@
-# React Gradient Hover
+# React Use Cursor Follow
 
-A high-performance React component that creates an elegant, interactive gradient effect that follows cursor movement. Perfect for creating engaging hover states and modern UI elements.
+A lightweight React hook that creates a smooth, customizable animated cursor element that follows your mouse movement. Perfect for creating modern, interactive user experiences with custom cursor effects.
 
-[![npm version](https://img.shields.io/npm/v/react-gradient-hover.svg)](https://www.npmjs.com/package/react-gradient-hover)
+[![npm version](https://img.shields.io/npm/v/react-use-cursor-follow.svg)](https://www.npmjs.com/package/react-use-cursor-follow)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Documentation-blue)](https://areknow.github.io/react-gradient-hover/)
 
 ## Overview
 
-React Gradient Hover enhances your UI with smooth, performant gradient animations that respond to user interaction. The component creates a dynamic spotlight effect that follows the cursor, providing a modern and engaging user experience.
+React Use Cursor Follow provides a performant way to create custom cursor effects that smoothly follow mouse movement. The hook creates a floating element that trails behind your cursor with customizable easing, size, color, and behavior options.
 
 ### Key Features
 
-- 🎨 Fluid gradient animations using requestAnimationFrame
-- 🌈 Support for multiple gradient colors (minimum of 2)
-- ⚡ Optimized performance with debounced event handling
-- 🎯 Customizable animation speed and transition duration
-- 📱 Responsive design with automatic resizing
+- 🎯 Smooth cursor following with customizable easing
+- 🎨 Fully customizable appearance (color, size, shape)
+- ⚡ Optimized performance with configurable update intervals
+- 🌅 Smart fade effects near viewport edges
+- 👁️ Optional default cursor hiding
 - 🔧 TypeScript support with comprehensive type definitions
-- 🎪 Smooth return-to-center animation
+- 📱 Responsive and works across all screen sizes
+- 🎪 Automatic cleanup and memory management
 
 ## Installation
 
 ```bash
-npm install react-gradient-hover
+npm install react-use-cursor-follow
 ```
 
 or
 
 ```bash
-yarn add react-gradient-hover
+yarn add react-use-cursor-follow
 ```
 
 ## Quick Start
 
 ```tsx
-import { GradientHover } from "react-gradient-hover";
+import { useCursorFollow } from "react-use-cursor-follow";
 
 function App() {
+  useCursorFollow({ color: "red" });
+
   return (
-    <GradientHover>
-      <div style={{ padding: "2rem" }}>
-        <h2>Interactive Gradient</h2>
-        <p>Hover to see the effect in action</p>
-      </div>
-    </GradientHover>
+    <div>
+      <h1>Move your mouse around!</h1>
+      <p>You'll see a custom red cursor following your mouse.</p>
+    </div>
   );
 }
 ```
 
-## Component API
+## Hook API
 
-### Props
+### Options
 
-| Prop                       | Type            | Default                  | Description                                 |
-| -------------------------- | --------------- | ------------------------ | ------------------------------------------- |
-| `colors`                   | `string[]`      | `['#EB2DD2', '#5AB5EE']` | Array of gradient colors (minimum 2)        |
-| `children`                 | `ReactNode`     | Required                 | Content to wrap with the gradient effect    |
-| `className`                | `string`        | `''`                     | Additional CSS class names                  |
-| `style`                    | `CSSProperties` | `{}`                     | Additional inline styles                    |
-| `onClick`                  | `() => void`    | -                        | Optional click handler                      |
-| `animationSpeed`           | `number`        | `5`                      | Animation speed (1-10, where 10 is fastest) |
-| `transitionDuration`       | `number`        | `1`                      | Transition duration in seconds              |
-| `shouldAlwaysShowGradient` | `boolean`       | `true`                   | Whether to show gradient before hover       |
+| Option           | Type      | Default  | Description                                  |
+| ---------------- | --------- | -------- | -------------------------------------------- |
+| `easingFactor`   | `number`  | `0.1`    | Easing factor for smooth movement (0.01-0.5) |
+| `updateInterval` | `number`  | `15`     | Update interval in milliseconds (5-50)       |
+| `size`           | `number`  | `14`     | Size of the cursor element in pixels (5-50)  |
+| `color`          | `string`  | `"#fff"` | Color of the cursor element                  |
+| `borderRadius`   | `string`  | `"100%"` | Border radius for shape customization        |
+| `zIndex`         | `number`  | `9999`   | Z-index for stacking order                   |
+| `hideCursor`     | `boolean` | `true`   | Whether to hide the default browser cursor   |
+| `fadeDuration`   | `number`  | `200`    | Fade transition duration in milliseconds     |
+| `fadeDistance`   | `number`  | `10`     | Distance from edges where fading starts      |
 
 ## Advanced Usage
 
-### Custom Color Gradients
+### Custom Styling
 
 ```tsx
-// Two-color gradient
-<GradientHover colors={["#667eea", "#764ba2"]}>
-  <div>Your content</div>
-</GradientHover>
-
-// Multi-color gradient
-<GradientHover colors={["#ff6b6b", "#4ecdc4", "#45b7d1"]}>
-  <div>Your content</div>
-</GradientHover>
+useCursorFollow({
+  color: "#ff6b6b",
+  size: 20,
+  borderRadius: "50%",
+  easingFactor: 0.15,
+  updateInterval: 10,
+});
 ```
 
-### Animation Control
+### Square Cursor
 
 ```tsx
-<GradientHover
-  animationSpeed={7}
-  transitionDuration={0.5}
-  shouldAlwaysShowGradient={false}
->
-  <div>Your content</div>
-</GradientHover>
+useCursorFollow({
+  color: "#4ecdc4",
+  size: 16,
+  borderRadius: "4px",
+  hideCursor: true,
+});
+```
+
+### Performance Optimized
+
+```tsx
+useCursorFollow({
+  easingFactor: 0.2,
+  updateInterval: 8,
+  size: 8,
+  fadeDuration: 100,
+});
+```
+
+### Keep Default Cursor
+
+```tsx
+useCursorFollow({
+  color: "#ffd93d",
+  hideCursor: false, // Keep the default cursor visible
+  zIndex: 1000,
+});
+```
+
+## Examples
+
+### Basic Red Cursor
+
+```tsx
+useCursorFollow({ color: "red" });
+```
+
+### Large Smooth Cursor
+
+```tsx
+useCursorFollow({
+  color: "#ff6b6b",
+  size: 25,
+  easingFactor: 0.05,
+  updateInterval: 10,
+});
+```
+
+### Fast Small Cursor
+
+```tsx
+useCursorFollow({
+  color: "#00d4ff",
+  size: 8,
+  easingFactor: 0.2,
+  updateInterval: 8,
+});
+```
+
+### Square Cursor with Edge Fading
+
+```tsx
+useCursorFollow({
+  color: "#ffd93d",
+  size: 16,
+  borderRadius: "4px",
+  fadeDistance: 20,
+  fadeDuration: 300,
+});
 ```
 
 ## Browser Support
 
-The component utilizes modern CSS features including:
+The hook utilizes modern web APIs including:
 
-- CSS Custom Properties (CSS Variables)
-- `requestAnimationFrame` API
-- Standard CSS positioning and transforms
+- `requestAnimationFrame` for smooth animations
+- CSS transitions for fade effects
+- Standard DOM event handling
+- CSS positioning and transforms
 
 Ensure your target browsers support these features or include appropriate polyfills.
 
@@ -136,9 +198,7 @@ Ensure your target browsers support these features or include appropriate polyfi
 
 ### Documentation
 
-View the interactive documentation and examples at [https://areknow.github.io/react-gradient-hover/](https://areknow.github.io/react-gradient-hover/)
-
-To run the documentation locally:
+View the interactive documentation and examples:
 
 ```bash
 npm run styleguide
@@ -153,7 +213,6 @@ Before publishing a new version, ensure you complete the following checklist:
 - [ ] TypeScript compilation succeeds (`npm run typecheck`)
 - [ ] Documentation is up to date
 - [ ] Version number is appropriate for changes (following semver)
-- [ ] Changelog is updated
 - [ ] Git working directory is clean
 
 #### Testing the Package Locally
@@ -171,7 +230,7 @@ Before publishing to npm, it's recommended to test the package locally:
 
    ```bash
    cd ../your-test-project
-   npm install ../react-gradient-hover/react-gradient-hover-x.y.z.tgz
+   npm install ../react-use-cursor-follow/react-use-cursor-follow-x.y.z.tgz
    ```
 
 3. Verify the package works as expected in your test project
@@ -198,24 +257,6 @@ Before publishing to npm, it's recommended to test the package locally:
    git push && git push --tags
    ```
 
-#### Troubleshooting
-
-If publishing fails:
-
-- Ensure you're logged in: `npm whoami`
-- Verify you have publish permissions: `npm access ls-packages`
-- Check that the package name is available: `npm view react-gradient-hover`
-
-For build errors:
-
-- Verify all dependencies are installed
-- Check TypeScript and Rollup configurations
-- Review the build logs for specific errors
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
 ## License
 
-[MIT](LICENSE) © [areknow](https://github.com/areknow)
+MIT © [areknow](https://github.com/areknow)
