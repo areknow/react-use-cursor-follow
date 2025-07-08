@@ -4,6 +4,7 @@ A lightweight React hook that creates a smooth, customizable animated cursor ele
 
 [![npm version](https://img.shields.io/npm/v/react-use-cursor-follow.svg)](https://www.npmjs.com/package/react-use-cursor-follow)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Documentation-blue)](https://areknow.github.io/react-use-cursor-follow/)
 
 ## Overview
 
