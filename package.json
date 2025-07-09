@@ -1,6 +1,6 @@
 {
   "name": "react-use-cursor-follow",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A React hook that creates a smooth customizable animated cursor element that follows your mouse",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
