@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import { CursorFollowOptions } from "./types";
 
@@ -28,31 +28,57 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
   const opacityRef = useRef(1);
   const lastMouseMoveRef = useRef(Date.now());
 
-  useEffect(() => {
-    // Hide the cursor if enabled
-    if (hideCursor) {
-      document.documentElement.style.cursor = "none";
+  useLayoutEffect(() => {
+    // Only create element if it doesn't exist
+    if (!elementRef.current) {
+      const cursorElement = document.createElement("div");
+      cursorElement.style.cssText = `
+          position: fixed;
+          width: ${size}px;
+          height: ${size}px;
+          background-color: ${color};
+          border-radius: ${borderRadius};
+          pointer-events: none;
+          z-index: ${zIndex};
+          transition: opacity ${fadeDuration}ms ease-in-out;
+          opacity: 1;
+          left: 0px;
+          top: 0px;
+          transform: translate(-50%, -50%);
+        `;
+
+      document.body.appendChild(cursorElement);
+      elementRef.current = cursorElement;
+    } else {
+      // Update existing element styles
+      elementRef.current.style.width = `${size}px`;
+      elementRef.current.style.height = `${size}px`;
+      elementRef.current.style.backgroundColor = color;
+      elementRef.current.style.borderRadius = borderRadius;
+      elementRef.current.style.zIndex = zIndex.toString();
+      elementRef.current.style.transition = `opacity ${fadeDuration}ms ease-in-out`;
     }
 
-    // Create the cursor element
-    const cursorElement = document.createElement("div");
-    cursorElement.style.cssText = `
-        position: fixed;
-        width: ${size}px;
-        height: ${size}px;
-        background-color: ${color};
-        border-radius: ${borderRadius};
-        pointer-events: none;
-        z-index: ${zIndex};
-        transition: opacity ${fadeDuration}ms ease-in-out;
-        opacity: 1;
-        left: 0px;
-        top: 0px;
-        transform: translate(-50%, -50%);
-      `;
+    // Handle cursor visibility
+    if (hideCursor) {
+      document.documentElement.style.cursor = "none";
+    } else {
+      document.documentElement.style.cursor = "";
+    }
 
-    document.body.appendChild(cursorElement);
-    elementRef.current = cursorElement;
+    // Cleanup function
+    return () => {
+      if (elementRef.current) {
+        document.body.removeChild(elementRef.current);
+        elementRef.current = null;
+      }
+      document.documentElement.style.cursor = "";
+    };
+  }, [size, color, borderRadius, zIndex, fadeDuration, hideCursor]);
+
+  // Main cursor logic
+  useEffect(() => {
+    if (!elementRef.current) return;
 
     // Calculate opacity based on distance from viewport edges
     const calculateOpacity = (x: number, y: number) => {
@@ -205,21 +231,8 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
       if (fadeTimeoutRef.current) {
         clearTimeout(fadeTimeoutRef.current);
       }
-      if (elementRef.current) {
-        document.body.removeChild(elementRef.current);
-      }
     };
-  }, [
-    easingFactor,
-    updateInterval,
-    size,
-    color,
-    borderRadius,
-    zIndex,
-    hideCursor,
-    fadeDuration,
-    fadeDistance,
-  ]);
+  }, [easingFactor, updateInterval, fadeDistance]);
 
   return null;
 };
