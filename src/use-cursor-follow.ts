@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { CursorFollowOptions } from "./types";
 
 const FADE_TIMEOUT = 100; // Timeout in ms to fully fade when mouse stops moving
+const CURSOR_HIDE_STYLE_ID = "react-use-cursor-follow-hide-cursor";
 
 /**
  * @visibleName useCursorFollow
@@ -71,8 +72,29 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
     // Handle cursor visibility
     if (hideCursor) {
       document.documentElement.style.cursor = "none";
+      document.body.style.cursor = "none";
+      // Add a style tag to ensure cursor is hidden even with CSS conflicts
+      if (!document.getElementById(CURSOR_HIDE_STYLE_ID)) {
+        const style = document.createElement("style");
+        style.id = CURSOR_HIDE_STYLE_ID;
+        style.textContent = `
+          * {
+            cursor: none !important;
+          }
+          input, button, a, [role="button"], [tabindex] {
+            cursor: none !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
     } else {
       document.documentElement.style.cursor = "";
+      document.body.style.cursor = "";
+      // Remove the style tag when cursor should be visible
+      const existingStyle = document.getElementById(CURSOR_HIDE_STYLE_ID);
+      if (existingStyle) {
+        existingStyle.remove();
+      }
     }
 
     // Calculate opacity based on distance from viewport edges
@@ -224,6 +246,12 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
       }
       // Reset cursor style on cleanup
       document.documentElement.style.cursor = "";
+      document.body.style.cursor = "";
+      // Remove the style tag on cleanup
+      const existingStyle = document.getElementById(CURSOR_HIDE_STYLE_ID);
+      if (existingStyle) {
+        existingStyle.remove();
+      }
     };
   }, [
     easingFactor,

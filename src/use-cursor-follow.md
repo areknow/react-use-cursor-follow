@@ -277,6 +277,41 @@ function InteractiveDemo() {
             Distance from edges where fading starts
           </div>
         </div>
+
+        {/* Hide Cursor */}
+        <div>
+          <label
+            style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              fontWeight: "bold",
+              color: "#555",
+            }}
+          >
+            👁️ Hide Cursor: {hideCursor ? "Yes" : "No"}
+          </label>
+          <label style={{ display: "flex", alignItems: "center" }}>
+            <input
+              type="checkbox"
+              checked={hideCursor}
+              onChange={(e) => setHideCursor(e.target.checked)}
+              style={{
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+              }}
+            />
+            <div
+              style={{
+                fontSize: "0.8rem",
+                color: "#666",
+                marginLeft: "5px",
+              }}
+            >
+              Hide the default browser cursor
+            </div>
+          </label>
+        </div>
       </div>
     </div>
   );
