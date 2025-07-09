@@ -28,9 +28,24 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
   const opacityRef = useRef(1);
   const lastMouseMoveRef = useRef(Date.now());
 
+  // Effect to update element styles when props change
   useLayoutEffect(() => {
-    // Only create element if it doesn't exist
-    if (!elementRef.current) {
+    if (elementRef.current) {
+      elementRef.current.style.width = `${size}px`;
+      elementRef.current.style.height = `${size}px`;
+      elementRef.current.style.backgroundColor = color;
+      elementRef.current.style.borderRadius = borderRadius;
+      elementRef.current.style.zIndex = zIndex.toString();
+      elementRef.current.style.transition = `opacity ${fadeDuration}ms ease-in-out`;
+    }
+  }, [size, color, borderRadius, zIndex, fadeDuration]);
+
+  // Main cursor logic
+  useEffect(() => {
+    // Function to create the cursor element
+    const createCursorElement = (x: number, y: number) => {
+      if (elementRef.current) return; // Element already exists
+
       const cursorElement = document.createElement("div");
       cursorElement.style.cssText = `
           position: fixed;
@@ -42,22 +57,16 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
           z-index: ${zIndex};
           transition: opacity ${fadeDuration}ms ease-in-out;
           opacity: 1;
-          left: 0px;
-          top: 0px;
+          left: ${x}px;
+          top: ${y}px;
           transform: translate(-50%, -50%);
         `;
 
       document.body.appendChild(cursorElement);
       elementRef.current = cursorElement;
-    } else {
-      // Update existing element styles
-      elementRef.current.style.width = `${size}px`;
-      elementRef.current.style.height = `${size}px`;
-      elementRef.current.style.backgroundColor = color;
-      elementRef.current.style.borderRadius = borderRadius;
-      elementRef.current.style.zIndex = zIndex.toString();
-      elementRef.current.style.transition = `opacity ${fadeDuration}ms ease-in-out`;
-    }
+      elementPos.current = { x, y };
+      initializedRef.current = true;
+    };
 
     // Handle cursor visibility
     if (hideCursor) {
@@ -65,20 +74,6 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
     } else {
       document.documentElement.style.cursor = "";
     }
-
-    // Cleanup function
-    return () => {
-      if (elementRef.current) {
-        document.body.removeChild(elementRef.current);
-        elementRef.current = null;
-      }
-      document.documentElement.style.cursor = "";
-    };
-  }, [size, color, borderRadius, zIndex, fadeDuration, hideCursor]);
-
-  // Main cursor logic
-  useEffect(() => {
-    if (!elementRef.current) return;
 
     // Calculate opacity based on distance from viewport edges
     const calculateOpacity = (x: number, y: number) => {
@@ -143,6 +138,11 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
       lastMouseMoveRef.current = Date.now();
 
+      // Create element on first mouse move if it doesn't exist
+      if (!elementRef.current) {
+        createCursorElement(e.clientX, e.clientY);
+      }
+
       // Clear any existing fade timeout
       if (fadeTimeoutRef.current) {
         clearTimeout(fadeTimeoutRef.current);
@@ -190,15 +190,6 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
       ) {
         const rect = elementRef.current.getBoundingClientRect();
 
-        // Initialize position on first run
-        if (!initializedRef.current) {
-          elementPos.current = { x: mousePos.current.x, y: mousePos.current.y };
-          elementRef.current.style.left = mousePos.current.x + "px";
-          elementRef.current.style.top = mousePos.current.y + "px";
-          initializedRef.current = true;
-          return;
-        }
-
         // Use center of element for calculations
         const x_box = rect.left + rect.width / 2;
         const y_box = rect.top + rect.height / 2;
@@ -231,8 +222,20 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
       if (fadeTimeoutRef.current) {
         clearTimeout(fadeTimeoutRef.current);
       }
+      // Reset cursor style on cleanup
+      document.documentElement.style.cursor = "";
     };
-  }, [easingFactor, updateInterval, fadeDistance]);
+  }, [
+    easingFactor,
+    updateInterval,
+    fadeDistance,
+    size,
+    color,
+    borderRadius,
+    zIndex,
+    fadeDuration,
+    hideCursor,
+  ]);
 
   return null;
 };
