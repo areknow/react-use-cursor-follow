@@ -6,6 +6,8 @@ A lightweight React hook that creates a smooth, customizable animated cursor ele
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Documentation-blue)](https://areknow.github.io/react-use-cursor-follow/)
 
+[CodeSandbox Demo](https://codesandbox.io/p/sandbox/zxfz8h)
+
 ## Overview
 
 React Use Cursor Follow provides a performant way to create custom cursor effects that smoothly follow mouse movement. The hook creates a floating element that trails behind your cursor with customizable easing, size, color, and behavior options.
