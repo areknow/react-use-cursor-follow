@@ -9,10 +9,8 @@ module.exports = {
   exampleMode: "expand", // Keep code examples always expanded
   showSidebar: false, // Hide the sidebar
   propsParser: require("react-docgen-typescript").parse,
-  getComponentPathLine(componentPath) {
-    const name = path.basename(componentPath, path.extname(componentPath));
-    return `import { ${name} } from "react-use-cursor-follow";`;
-  },
+  getComponentPathLine: () =>
+    `import { useCursorFollow } from "react-use-cursor-follow";`,
   ribbon: {
     // Link to open on the ribbon click (required)
     url: "https://github.com/areknow/react-use-cursor-follow",
