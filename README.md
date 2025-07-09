@@ -23,7 +23,6 @@ React Use Cursor Follow provides a performant way to create custom cursor effect
 - 👁️ Optional default cursor hiding
 - 🔧 TypeScript support with comprehensive type definitions
 - 📱 Responsive and works across all screen sizes
-- 🎪 Automatic cleanup and memory management
 
 ## Installation
 
