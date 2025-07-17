@@ -22,10 +22,12 @@ function InteractiveDemo() {
   const [color, setColor] = React.useState(0);
   const [borderRadius, setBorderRadius] = React.useState("100%");
   const [hideCursor, setHideCursor] = React.useState(true);
+  const [isEnabled, setIsEnabled] = React.useState(true);
   const [fadeDuration, setFadeDuration] = React.useState(200);
   const [fadeDistance, setFadeDistance] = React.useState(10);
 
   useCursorFollow({
+    isEnabled,
     easingFactor,
     updateInterval,
     size,
@@ -309,6 +311,41 @@ function InteractiveDemo() {
               }}
             >
               Hide the default browser cursor
+            </div>
+          </label>
+        </div>
+
+        {/* Hide Cursor */}
+        <div>
+          <label
+            style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              fontWeight: "bold",
+              color: "#555",
+            }}
+          >
+            ⚡️ Enable hook: {isEnabled ? "Yes" : "No"}
+          </label>
+          <label style={{ display: "flex", alignItems: "center" }}>
+            <input
+              type="checkbox"
+              checked={isEnabled}
+              onChange={(e) => setIsEnabled(e.target.checked)}
+              style={{
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+              }}
+            />
+            <div
+              style={{
+                fontSize: "0.8rem",
+                color: "#666",
+                marginLeft: "5px",
+              }}
+            >
+              Enable the cursor follow hook
             </div>
           </label>
         </div>

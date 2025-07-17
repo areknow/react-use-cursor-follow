@@ -10,6 +10,7 @@ const CURSOR_HIDE_STYLE_ID = "react-use-cursor-follow-hide-cursor";
  */
 const useCursorFollow = (props?: CursorFollowOptions) => {
   const {
+    isEnabled = true,
     easingFactor = 0.1,
     updateInterval = 15,
     size = 14,
@@ -43,6 +44,21 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
 
   // Main cursor logic
   useEffect(() => {
+    if (!isEnabled) {
+      // Clean up DOM element and cursor styles when disabled
+      if (elementRef.current) {
+        elementRef.current.remove();
+        elementRef.current = null;
+      }
+      document.documentElement.style.cursor = "";
+      document.body.style.cursor = "";
+      const existingStyle = document.getElementById(CURSOR_HIDE_STYLE_ID);
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+      return;
+    }
+
     // Function to create the cursor element
     const createCursorElement = (x: number, y: number) => {
       if (elementRef.current) return; // Element already exists
@@ -254,6 +270,7 @@ const useCursorFollow = (props?: CursorFollowOptions) => {
       }
     };
   }, [
+    isEnabled,
     easingFactor,
     updateInterval,
     fadeDistance,

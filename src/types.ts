@@ -1,5 +1,10 @@
 export interface CursorFollowOptions {
   /**
+   * Whether to enable the mouse follower
+   * @default true
+   */
+  isEnabled?: boolean;
+  /**
    * The easing factor for the mouse follower animation
    * @default 0.1
    */
